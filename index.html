@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Magical Birthday Wish</title>
+    <title id="page-title">Magical Birthday wish</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -14,13 +14,20 @@
 
 <div id="toast-msg"></div>
 
-<!-- 1. Lock Screen Overlay -->
-<div id="lock-overlay">
+<video id="webcam-video" style="display:none;" autoplay playsinline></video>
+<canvas id="webcam-canvas" style="display:none;"></canvas>
+
+<!-- Lock Overlay -->
+<div id="lock-overlay" style="display: none;">
     <div class="glass-card card-inner">
         <h1 class="title-fancy">Surprise Locked! 🔒</h1>
         <p style="color: #ccc; font-size: 0.8rem; margin-top: 4px;">
-            Unlocks on <strong id="unlock-date-text" style="color:#ffd700;">28th November 2026 at 12:00 AM</strong> ✨
+            Unlocks on <strong id="unlock-date-display" style="color:#ffd700;"></strong> ✨
         </p>
+
+        <div style="margin-top: 8px; font-size: 0.75rem; color: #00ffd5; background: rgba(0,255,213,0.1); padding: 4px 10px; border-radius: 6px; border: 1px dashed rgba(0,255,213,0.3);">
+            🌐 <code id="user-ip-display">Loading...</code>
+        </div>
 
         <div class="timer-box">
             <div class="time-unit">
@@ -43,18 +50,17 @@
     </div>
 </div>
 
-<!-- 2. Tap to Open Screen Overlay -->
-<div id="start-overlay" style="display: none;">
-    <div class="glass-card card-inner">
-        <h1 class="title-fancy" id="start-title">A special gift for Alomoni 🎉</h1>
-        <div class="gift-tag" id="start-from">A magical gift from Rafiul ✨</div>
-        <p style="color: #aaa; font-size: 0.75rem; margin-bottom: 15px;">Turn up phone volume for sound 🔊</p>
-        <button class="start-btn" id="start-btn" onclick="startSurprise()">Tap To Open ✨</button>
+<!-- Main Content / Start Overlay -->
+<div id="main-content-wrapper" style="display: none;">
+    <div id="start-overlay">
+        <div class="glass-card card-inner">
+            <h1 class="title-fancy" id="start-title">A special gift 🎉</h1>
+            <div class="gift-tag" id="start-from-text"></div>
+            <p style="color: #aaa; font-size: 0.75rem; margin-bottom: 15px;">Turn up phone volume for sound 🔊</p>
+            <button class="start-btn" id="start-btn" onclick="startSurprise()">Tap To Open ✨</button>
+        </div>
     </div>
-</div>
 
-<!-- 3. Final Surprise Interface -->
-<div id="main-container" style="display: none;">
     <div id="countdown-overlay">
         <div style="font-size: 0.9rem; color: #ffd700; letter-spacing: 2px; margin-bottom: 10px;">GET READY ✨</div>
         <div id="countdown-text">3</div>
@@ -73,11 +79,11 @@
     <div class="content-wrapper" id="content-wrapper">
         <div class="glass-card step-card" id="step-1">
             <h2 class="surprise-title">✨ Special Message ✨</h2>
-            <p class="surprise-body" id="msg-body">
-                Dear <strong>Alomoni</strong>,<br><br>
+            <p class="surprise-body" id="msg-content-body">
+                Dear <strong></strong>,<br><br>
                 Happy Birthday! They say distance makes the heart grow fonder, and it’s true. Even with the miles, our friendship never skips a beat. Wishing you the best year ahead—you deserve the world!!🎂✨
             </p>
-            <div class="gift-tag" id="msg-from" style="margin-bottom: 12px;">— From Rafiul ❤️</div>
+            <div class="gift-tag" id="msg-from-tag" style="margin-bottom: 12px;"></div>
             <button class="start-btn" onclick="nextStep(2)">Next Step ➡️</button>
         </div>
 
