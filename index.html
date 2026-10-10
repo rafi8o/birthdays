@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Magical Birthday Wish</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+
+<div id="toast-msg"></div>
+
+<!-- 1. Lock Screen Overlay -->
+<div id="lock-overlay">
+    <div class="glass-card card-inner">
+        <h1 class="title-fancy">Surprise Locked! 🔒</h1>
+        <p style="color: #ccc; font-size: 0.8rem; margin-top: 4px;">
+            Unlocks on <strong id="unlock-date-text" style="color:#ffd700;">28th November 2026 at 12:00 AM</strong> ✨
+        </p>
+
+        <div class="timer-box">
+            <div class="time-unit">
+                <div class="time-num" id="days">00</div>
+                <div class="time-label">Days</div>
+            </div>
+            <div class="time-unit">
+                <div class="time-num" id="hours">00</div>
+                <div class="time-label">Hours</div>
+            </div>
+            <div class="time-unit">
+                <div class="time-num" id="mins">00</div>
+                <div class="time-label">Mins</div>
+            </div>
+            <div class="time-unit">
+                <div class="time-num" id="secs">00</div>
+                <div class="time-label">Secs</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 2. Tap to Open Screen Overlay -->
+<div id="start-overlay" style="display: none;">
+    <div class="glass-card card-inner">
+        <h1 class="title-fancy" id="start-title">A special gift for Alomoni 🎉</h1>
+        <div class="gift-tag" id="start-from">A magical gift from Rafiul ✨</div>
+        <p style="color: #aaa; font-size: 0.75rem; margin-bottom: 15px;">Turn up phone volume for sound 🔊</p>
+        <button class="start-btn" id="start-btn" onclick="startSurprise()">Tap To Open ✨</button>
+    </div>
+</div>
+
+<!-- 3. Final Surprise Interface -->
+<div id="main-container" style="display: none;">
+    <div id="countdown-overlay">
+        <div style="font-size: 0.9rem; color: #ffd700; letter-spacing: 2px; margin-bottom: 10px;">GET READY ✨</div>
+        <div id="countdown-text">3</div>
+    </div>
+
+    <div class="controls-bar" id="top-controls">
+        <button class="action-btn" onclick="toggleTheme()">🎨 Theme</button>
+        <button class="action-btn" id="music-btn" onclick="toggleMusic()">🎵 Music</button>
+        <button class="action-btn" onclick="readAgain()" style="background: rgba(0, 200, 255, 0.4);">📖 Read Again</button>
+    </div>
+
+    <img src="gift.gif" class="gif-sticker" alt="Cute GIF">
+    <div id="canvas-container"></div>
+    <div class="scroll-down-hint" id="scroll-hint"></div>
+
+    <div class="content-wrapper" id="content-wrapper">
+        <div class="glass-card step-card" id="step-1">
+            <h2 class="surprise-title">✨ Special Message ✨</h2>
+            <p class="surprise-body" id="msg-body">
+                Dear <strong>Alomoni</strong>,<br><br>
+                Happy Birthday! They say distance makes the heart grow fonder, and it’s true. Even with the miles, our friendship never skips a beat. Wishing you the best year ahead—you deserve the world!!🎂✨
+            </p>
+            <div class="gift-tag" id="msg-from" style="margin-bottom: 12px;">— From Rafiul ❤️</div>
+            <button class="start-btn" onclick="nextStep(2)">Next Step ➡️</button>
+        </div>
+
+        <div class="glass-card step-card" id="step-2">
+            <div class="cake-icon">🎂</div>
+            <h2 class="gold-text">Make A Wish! ✨</h2>
+            <p style="font-size: 0.85rem; color: #ddd; line-height: 1.4; margin-bottom: 12px;">
+                Here is your virtual Birthday Cake! Blow out the candles and make a special wish for this year!! 🎉🎈
+            </p>
+            <div class="btn-group" style="margin-bottom: 12px;">
+                <button class="start-btn" onclick="triggerFireworks()" style="padding: 9px 14px; font-size: 0.8rem; width: auto; flex: 1;">
+                    Blow Candles 🕯️
+                </button>
+                <button class="secondary-btn" onclick="sendLove()" style="flex: 1;">
+                    Send Love ❤️
+                </button>
+            </div>
+            <button class="start-btn" onclick="nextStep(3)" style="background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);">Next Step ➡</button>
+        </div>
+
+        <div class="glass-card step-card" id="step-3">
+            <h2 class="gold-text" style="font-size: 2rem;">Reply to Rafiul 💌</h2>
+            <p style="font-size: 0.85rem; color: #ffd700; margin-bottom: 10px; font-weight: 600;">
+                আলু! বল, কেমন লাগলো আমার Gift!😊,তোকে বলেছিলাম না যে আমি তোর কাছে যেতে না পারলেও আমার Gift ঠিকই তোর কাছে পৌঁছে যাবে!💌
+                আর তোর জন্য স্পেশাল আলুবাসা !!!🥔💖🫶😁
+            </p>
+            <textarea id="user-custom-msg" class="msg-input" rows="2" placeholder="Write your reply here..."></textarea>
+            <div class="btn-group">
+                <button class="start-btn" id="send-btn" onclick="sendCustomMessage()" style="padding: 9px 12px; font-size: 0.8rem; flex: 1; max-width: none;">
+                    Send 🚀
+                </button>
+                <button class="secondary-btn" onclick="readAgain()" style="background: rgba(0, 200, 255, 0.4);">
+                    📖 Read
+                </button>
+                <button class="secondary-btn" onclick="endExperience()" style="background: rgba(255, 0, 0, 0.4);">
+                    ❌ End
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<audio id="bg-music" loop preload="auto" src="song.mp3"></audio>
+<script src="script.js"></script>
+
+</body>
+</html>
